@@ -1,5 +1,5 @@
 {
-  "name": "mihpa/odata-1c-php",
+  "name": "vktrus/odata-1c-php5",
   "type": "library",
   "description": "Библиотека доступа к 1С:Предприятие 8.3 через протокол OData. Язык программирования PHP5.",
   "keywords": [

@@ -7,7 +7,7 @@
 
 ## Установка библиотеки через Composer
 ``` bash
-$ composer require vktRus/odata-1c-php5
+$ composer require vktrus/odata-1c-php5
 ```
 
 ## Использование библиотеки
