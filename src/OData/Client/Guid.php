@@ -8,7 +8,7 @@ class Guid
      * @param string|null $guid
      * @return bool
      */
-    public static function is_valid(string $guid = null): bool
+    public static function is_valid($guid = null)
     {
         if (is_null($guid)) {
             return true;

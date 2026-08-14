@@ -11,32 +11,37 @@ class OdataConnection implements ArrayAccess
     /**
      * @var array
      */
-    private array $container = [];
+    private $container = [];
 
     /**
      * @var Client
      */
-    private Client $client;
+    private $client;
 
     /**
      * @var string
      */
-    private string $url;
+    private $url;
 
     /**
      * @var array
      */
-    private array $options;
+    private $options;
+
+    private function endsWith($haystack, $needle) {
+        $length = strlen($needle);
+        return $length > 0 ? substr($haystack, -$length) === $needle : true;
+    }
 
     /**
      * @param string $url
      * @param array|null $options
      */
-    public function __construct(string $url, ?array $options = [])
+    public function __construct($url, $options = [])
     {
         $this->client = new Client();
 
-        if (!empty($url) && !str_ends_with($url, '/')) {
+        if (!empty($url) && !self::endsWith($url, '/')) {
             $url .= '/';
         }
         $this->url = $url;
@@ -57,7 +62,7 @@ class OdataConnection implements ArrayAccess
      * @param string $username
      * @param string $password
      */
-    public function setAuth(string $username, string $password)
+    public function setAuth($username, $password)
     {
         $this->options = array_merge_recursive(
             $this->options,
@@ -77,7 +82,7 @@ class OdataConnection implements ArrayAccess
      * @param string $proxyPort
      * @param bool|null $isSecured
      */
-    public function setProxy(string $proxyHost, string $proxyPort, ?bool $isSecured = false)
+    public function setProxy($proxyHost, $proxyPort, $isSecured = false)
     {
         $this->options = array_merge_recursive(
             $this->options,
@@ -96,7 +101,7 @@ class OdataConnection implements ArrayAccess
      *
      * @param int $timeout
      */
-    public function setTimeout(int $timeout)
+    public function setTimeout($timeout)
     {
         $this->options = array_merge_recursive(
             $this->options,
@@ -124,7 +129,7 @@ class OdataConnection implements ArrayAccess
      * @param $value
      * @throws Exception
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
             $this->container[] = $value;
@@ -137,7 +142,7 @@ class OdataConnection implements ArrayAccess
      * @param $offset
      * @return bool
      */
-    public function offsetExists($offset): bool
+    public function offsetExists($offset)
     {
         return isset($this->container[$offset]);
     }
@@ -146,7 +151,7 @@ class OdataConnection implements ArrayAccess
      * @param $offset
      * @return void
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset($offset)
     {
         unset($this->container[$offset]);
     }
@@ -155,8 +160,8 @@ class OdataConnection implements ArrayAccess
      * @param $offset
      * @return mixed
      */
-    public function offsetGet($offset): mixed
+    public function offsetGet($offset)
     {
-        return $this->container[$offset] ?? null;
+        return isset($this->container[$offset]) ? $this->container[$offset] : null;
     }
 }

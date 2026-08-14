@@ -12,66 +12,66 @@ class OdataContainer
     /**
      * @var OdataConnection
      */
-    private OdataConnection $connection;
+    private $connection;
 
     /**
      * @var string
      */
-    private string $name;
+    private $name;
 
     /**
      * @var Client
      */
-    private Client $client;
+    private $client;
 
     /**
      * @var array
      */
-    protected array $querySelect = [];
+    protected $querySelect = [];
 
     /**
      * @var array
      */
-    protected array $queryExpand = [];
+    protected $queryExpand = [];
 
     /**
      * @var array
      */
-    protected array $queryFilter = [];
+    protected $queryFilter = [];
 
     /**
      * @var string
      */
-    protected string $queryOrderBy;
+    protected $queryOrderBy;
 
     /**
      * @var bool
      */
-    private bool $queryMetadata = false;
+    private $queryMetadata = false;
 
     /**
      * @var int
      */
-    private int $top;
+    private $top;
 
     /**
      * @var int
      */
-    private int $offset;
+    private $offset;
 
     /**
      * Ответ интерфейса OData
      *
      * @var OdataResponse|null
      */
-    private ?OdataResponse $response;
+    private $response;
 
     /**
      * @param OdataConnection $connection
      * @param string $name
      * @throws CorruptObjectNameException
      */
-    public function __construct(OdataConnection $connection, string $name)
+    public function __construct(OdataConnection $connection, $name)
     {
         $this->connection = $connection;
 
@@ -121,7 +121,7 @@ class OdataContainer
      * @param string|array $data
      * @return OdataContainer
      */
-    public function select(string|array $data)
+    public function select($data)
     {
         if (!is_array($data)) {
             $data = [$data];
@@ -136,7 +136,7 @@ class OdataContainer
      * @param string|array $data
      * @return OdataContainer
      */
-    public function expand(string|array $data)
+    public function expand($data)
     {
         if (!is_array($data)) {
             $data = [$data];
@@ -151,7 +151,7 @@ class OdataContainer
      * @param string|array $data
      * @return OdataContainer
      */
-    public function filter(string|array $data)
+    public function filter($data)
     {
         if (!is_array($data)) {
             $data = [$data];
@@ -167,7 +167,7 @@ class OdataContainer
      * @param string $direction
      * @return OdataContainer
      */
-    public function orderBy(string $name, string $direction = 'asc')
+    public function orderBy($name, $direction = 'asc')
     {
         $this->queryOrderBy = sprintf('%s %s', $name, $direction);
         return $this;
@@ -187,7 +187,7 @@ class OdataContainer
      * @param int $quantity
      * @return OdataContainer
      */
-    public function top(int $quantity)
+    public function top($quantity)
     {
         $this->top = $quantity;
         return $this;
@@ -197,7 +197,7 @@ class OdataContainer
      * @param int $quantity
      * @return OdataContainer
      */
-    public function offset(int $quantity)
+    public function offset($quantity)
     {
         $this->offset = $quantity;
         return $this;
@@ -210,7 +210,7 @@ class OdataContainer
      * @return array|null
      * @throws GuidValidationException
      */
-    public function get(string $guid = null)
+    public function get($guid = null)
     {
         if (!Guid::is_valid($guid)) {
             throw new GuidValidationException();
@@ -243,7 +243,7 @@ class OdataContainer
      * @return array|bool
      * @throws GuidValidationException
      */
-    public function create(array $data): array|bool
+    public function create(array $data)
     {
         return $this->update($data);
     }
@@ -256,7 +256,7 @@ class OdataContainer
      * @return array|bool
      * @throws GuidValidationException
      */
-    public function update(array $data, ?string $guid = null): array|bool
+    public function update($data, $guid = null)
     {
         if (!Guid::is_valid($guid)) {
             throw new GuidValidationException();
@@ -284,7 +284,7 @@ class OdataContainer
      * @return array|bool
      * @throws GuidValidationException
      */
-    public function delete(string $guid): array|bool
+    public function delete($guid)
     {
         if (!Guid::is_valid($guid)) {
             throw new GuidValidationException();
@@ -300,7 +300,7 @@ class OdataContainer
      * @return array|bool
      * @throws GuidValidationException
      */
-    public function undelete(string $guid): array|bool
+    public function undelete($guid)
     {
         if (!Guid::is_valid($guid)) {
             throw new GuidValidationException();
@@ -316,7 +316,7 @@ class OdataContainer
      * @return bool
      * @throws GuidValidationException
      */
-    public function deletePermanently(string $guid): bool
+    public function deletePermanently($guid)
     {
         if (!Guid::is_valid($guid)) {
             throw new GuidValidationException();
@@ -333,7 +333,7 @@ class OdataContainer
      * @return array|bool
      * @throws GuidValidationException
      */
-    public function post(string $guid, ?bool $isOperational = false): array|bool
+    public function post($guid, $isOperational = false)
     {
         if (!Guid::is_valid($guid)) {
             throw new GuidValidationException();
@@ -356,7 +356,7 @@ class OdataContainer
      * @return array|bool
      * @throws GuidValidationException
      */
-    public function unpost(string $guid): array|bool
+    public function unpost($guid)
     {
         if (!Guid::is_valid($guid)) {
             throw new GuidValidationException();
@@ -377,7 +377,7 @@ class OdataContainer
      * @param array|null $options
      * @return bool
      */
-    private function request(string $method, string $request, ?array $options = []): bool
+    private function request($method, $request, $options = [])
     {
         $request = $this->connection->url . $request;
 
@@ -434,7 +434,7 @@ class OdataContainer
      *
      * @return int|null
      */
-    public function getResponseCode(): int|null
+    public function getResponseCode()
     {
         if (!isset($this->response)) {
             return null;
@@ -447,7 +447,7 @@ class OdataContainer
      *
      * @return string|null
      */
-    public function getResponsePhrase(): string|null
+    public function getResponsePhrase()
     {
         if (!isset($this->response)) {
             return null;
@@ -460,7 +460,7 @@ class OdataContainer
      *
      * @return int|null
      */
-    public function getOdataErrorCode(): int|null
+    public function getOdataErrorCode()
     {
         if (!isset($this->response)) {
             return null;
@@ -473,7 +473,7 @@ class OdataContainer
      *
      * @return string|null
      */
-    public function getOdataErrorPhrase(): string|null
+    public function getOdataErrorPhrase()
     {
         if (!isset($this->response)) {
             return null;

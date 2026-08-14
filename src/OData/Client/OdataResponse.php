@@ -2,6 +2,7 @@
 
 namespace OData\Client;
 
+//use GuzzleHttp\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class OdataResponse
@@ -9,12 +10,12 @@ class OdataResponse
     /**
      * @var ResponseInterface|null
      */
-    private ?ResponseInterface $response;
+    private $response;
 
     /**
      * @var array|null
      */
-    private ?array $array;
+    private $array;
 
     public function __construct() {
     }
@@ -24,7 +25,7 @@ class OdataResponse
         $this->response = $response;
     }
 
-    public function toArray(): array|null
+    public function toArray()
     {
         if (empty($this->array)) {
             $this->array = json_decode($this->response->getBody(), true);
@@ -32,17 +33,17 @@ class OdataResponse
         return $this->array;
     }
 
-    public function getResponseCode(): int
+    public function getResponseCode()
     {
         return $this->response->getStatusCode();
     }
 
-    public function getResponsePhrase(): string
+    public function getResponsePhrase()
     {
         return $this->response->getReasonPhrase();
     }
 
-    public function getOdataErrorCode(): int|null
+    public function getOdataErrorCode()
     {
         $body = $this->toArray();
 
@@ -53,7 +54,7 @@ class OdataResponse
         return null;
     }
 
-    public function getOdataErrorPhrase(): string|null
+    public function getOdataErrorPhrase()
     {
         $body = $this->toArray();
 
@@ -64,11 +65,19 @@ class OdataResponse
         return null;
     }
 
-    public function getLastId(): string|null
+    public function getLastId()
     {
         if ($this->response->hasHeader('Location')) {
-            preg_match('/guid\'(.*?)\'/', implode(' ', $this->response->getHeader('Location')), $matches);
+            $matches = [];
+            preg_match(
+                '/guid\'(.*?)\'/',
+                implode(
+                    ' ',
+                    $this->response->getHeader('Location')
+                ), $matches
+            );
             if ($matches) {
+                /** @noinspection PhpArrayIsAlwaysEmptyInspection */
                 return $matches[1];
             }
         }
@@ -76,7 +85,7 @@ class OdataResponse
         return null;
     }
 
-    public function values(): array
+    public function values()
     {
         $body = $this->toArray();
 
