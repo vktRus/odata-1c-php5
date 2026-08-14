@@ -7,7 +7,7 @@
 
 ## Установка библиотеки через Composer
 ``` bash
-$ composer require mihpa/odata-1c-php
+$ composer require vktRus/odata-1c-php5
 ```
 
 ## Использование библиотеки
