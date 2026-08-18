@@ -221,7 +221,13 @@ class OdataContainer
             $request .= sprintf('(guid\'%s\')', $guid);
         }
 
-        if ($this->request('GET', $request)) {
+        if (isset($this->connection->options['auth'])) {
+            $options[] = [];
+        } else {
+            $options = [];
+        }
+
+        if ($this->request('GET', $request, $options)) {
             if ($data = $this->response->values()) {
                 if (!empty($data)) {
                     if ($guid) {
